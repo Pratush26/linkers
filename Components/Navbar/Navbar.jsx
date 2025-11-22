@@ -1,10 +1,8 @@
-"use client"
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import ActiveLink from "./ActiveLink";
 
 export default function Navbar() {
-    const path = usePathname()
     const user = null
     return (
         <nav className="flex justify-between items-center py-3 px-9 text-sm font-medium">
@@ -13,19 +11,19 @@ export default function Navbar() {
                 inkers
             </Link>
             <div className="space-x-3">
-                <Link className={`trns ${path === "/notification" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/notification">Notifications</Link>
-                <Link className={`trns ${path === "/liked-post" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/liked-post">Liked</Link>
+                <ActiveLink href="/notifications">Notification</ActiveLink>
+                <ActiveLink href="/liked-post">Liked</ActiveLink>
             </div>
             {
                 user?
                 <div className="space-x-3">
-                    <Link className={`trns ${path === "/dashboard" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/dashboard">Dashboard</Link>
-                    <Link className={`trns ${path === "/settings" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/settings">Settings</Link>
+                    <ActiveLink href="/dashboard">Dashboard</ActiveLink>
+                    <ActiveLink href="/options">Options</ActiveLink>
                 </div>
                 :
                 <div className="space-x-3">
-                    <Link className={`trns ${path === "/registration" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/register">Register</Link>
-                    <Link className={`trns ${path === "/login" ? "underline underline-offset-4" : "hover:text-gray-500"}`} href="/login">Login</Link>
+                    <ActiveLink href="/register">Register</ActiveLink>
+                    <ActiveLink href="/login">Login</ActiveLink>
                 </div>
             }
         </nav>
