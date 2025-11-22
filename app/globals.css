@@ -12,7 +12,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -21,6 +21,10 @@
 
 body {
   background: var(--background);
+  font-family: var(--font-work-sans);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.trns{
+  transition: all .3s ease-in-out;
 }
