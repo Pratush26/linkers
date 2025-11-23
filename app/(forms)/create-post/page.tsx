@@ -10,7 +10,7 @@ interface FormValues {
 };
 
 export default function CreatePost() {
-    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>()
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
     const onFormSubmit = (data: FormValues) => {
       console.log(data)
     }

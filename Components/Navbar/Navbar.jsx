@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import ActiveLink from "./ActiveLink";
+import { auth } from "@/auth";
 
-export default function Navbar() {
-    const user = null
+export default async function Navbar() {
+    const {user} = await auth()
     return (
         <nav className="flex justify-between items-center py-3 px-9 text-sm font-medium">
             <Link href="/" className="flex text-2xl items-end font-semibold">
