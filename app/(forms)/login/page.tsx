@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import "../form.css"
 import { FcGoogle } from "react-icons/fc";
 import { GoogleSignin } from "@/app/Actions/authFunctions";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface FormValues {
     email: string;
@@ -11,10 +13,16 @@ interface FormValues {
 };
 
 export default function LoginPage() {
+
+    const router = useRouter()
+    const { data: session } = useSession()
+    if (session) router.push("/dashboard")
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
+
     const onFormSubmit = (data: FormValues) => {
         console.log(data)
     }
+
     return (
         <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-md/50">
             <fieldset>
