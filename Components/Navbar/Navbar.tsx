@@ -22,22 +22,22 @@ export default function Navbar() {
                 session
                 &&
                 <div className="space-x-3">
-                    <ActiveLink pathname={pathname} href="/notifications">Notification</ActiveLink>
-                    <ActiveLink pathname={pathname} href="/liked-post">Liked</ActiveLink>
+                    <ActiveLink path={pathname} href="/notifications">Notification</ActiveLink>
+                    <ActiveLink path={pathname} href="/liked-post">Liked</ActiveLink>
                 </div>
             }
             {
                 session ?
                     <div className="flex gap-2 items-center">
-                        <ActiveLink pathname={pathname} href="/dashboard">Dashboard</ActiveLink>
+                        <ActiveLink path={pathname} href={`/dashboard/${session?.user?.email}`}>Dashboard</ActiveLink>
                         <span className={`${expaneded && "bg-gray-200 inset-shadow-sm"} p-2 trns rounded-sm flex items-center justify-center`}>
                             <button onClick={() => setExpaneded(!expaneded)} className={`${expaneded && "rotate-90"} trns`}><BsGearFill /></button>
                         </span>
                     </div>
                     :
                     <div className="space-x-3">
-                        <ActiveLink pathname={pathname} href="/register">Register</ActiveLink>
-                        <ActiveLink pathname={pathname} href="/login">Login</ActiveLink>
+                        <ActiveLink path={pathname} href="/register">Register</ActiveLink>
+                        <ActiveLink path={pathname} href="/login">Login</ActiveLink>
                     </div>
             }
             <Sidebar extended={expaneded} />

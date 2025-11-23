@@ -1,7 +1,7 @@
 import Link from "next/link"
 
-export default function ActiveLink({ href, pathname, children, ...props }: {href: string; pathname: string; children: React.ReactNode}) {
-  const isActive = pathname === href
+export default function ActiveLink({ href, path, children, ...props }: {href: string; path: string; children: React.ReactNode}) {
+  const isActive = path === href
 
   return (
     <Link
