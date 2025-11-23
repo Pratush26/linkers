@@ -1,12 +1,11 @@
 input,
 textarea,
 select {
-    background-color: var(--color-base-100);
+    background-color: whitesmoke;
     padding: 10px 20px;
     font-size: .9rem;
     width: 100%;
     border-radius: 6px;
-    box-shadow: 2px 2px 4px gray;
 }
 
 input:focus,
@@ -26,7 +25,6 @@ label{
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 2px 2px 4px gray;
     -webkit-text-fill-color: var(--color-base-content);
     transition: background-color 5000s ease-in-out 0s;
 }

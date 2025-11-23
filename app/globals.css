@@ -28,3 +28,17 @@ body {
 .trns{
   transition: all .3s ease-in-out;
 }
+
+.btn{
+  background-color: var(--foreground);
+  color: var(--background);
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-out{
+  border: 1px solid var(--foreground);
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+}

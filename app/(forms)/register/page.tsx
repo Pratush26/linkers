@@ -1,0 +1,47 @@
+"use client"
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import "../form.css"
+import { FcGoogle } from "react-icons/fc";
+
+interface FormValues {
+    name: string;
+    email: string;
+    password: string;
+    photo: File;
+};
+
+export default function RegistrationPage() {
+    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>()
+    const onFormSubmit = (data: FormValues) => {
+      console.log(data)
+    }
+    return (
+        <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-md/50">
+            <fieldset>
+                <legend className="font-bold text-3xl text-center m-4">Create an Account</legend>
+                <div className="w-full">
+                    {errors.name ? <p className="text-sm text-rose-500">{errors.name.message}</p> : <label htmlFor="name">Eame :</label>}
+                    <input type="text" {...register("name", { required: "name is required" })} placeholder="Enter your name" id="name" />
+                </div>
+                <div className="w-full">
+                  {errors.email ? <p className="text-sm text-rose-500">{errors.email.message}</p> : <label htmlFor="email">Email :</label>}
+                  <input type="email" {...register("email", { required: "email is required" })} placeholder="Enter your email" id="email" />
+                </div>
+                <div className="w-full">
+                  {errors.photo ? <p className="text-sm text-rose-500">{errors.photo.message}</p> : <label htmlFor="photo">photo :</label>}
+                  <input type="file" {...register("photo", { required: "photo is required" })} id="photo" />
+                </div>
+                <div className="w-full">
+                  {errors.password ? <p className="text-sm text-rose-500">{errors.password.message}</p> : <label htmlFor="password">password :</label>}
+                  <input type="password" {...register("password", { required: "password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/, message: "Password must contain at least 8 upper and lowercase characters" }})} placeholder="Enter password" id="password" />
+                </div>
+                <p className="text-sm my-3">Already have an account? <Link href="/login" className="text-blue-500 font-medium trns hover:text-blue-600">Login</Link></p>
+                <div className="flex flex-col items-center gap-2">
+                <button type="submit" className="btn trns rounded-md hover:scale-103">{isSubmitting? "Creating..." : "Create"}</button>
+                  <button type="button" className="btn-out trns rounded-md hover:scale-103 flex gap-2 items-center"><FcGoogle /> Sign up with Google</button>
+                </div>
+            </fieldset>
+        </form>
+    )
+}
