@@ -36,7 +36,7 @@ export default function RegistrationPage() {
       if (res.success) toast.success(res.message as string || "Process successful")
       else toast.error(res.message as string || "Something went wrong")
     } catch (err) {
-      toast.error(err?.message as string || err?.response?.data?.error?.message as string || "Something went wrong");
+      toast.error("Something went wrong");
       console.error(err);
     }
   }
