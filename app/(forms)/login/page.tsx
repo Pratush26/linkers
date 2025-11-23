@@ -16,7 +16,7 @@ export default function LoginPage() {
 
     const router = useRouter()
     const { data: session } = useSession()
-    if (session) router.push("/dashboard")
+    if (session) router.push(`/dashboard/${session?.user?.email}`)
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
     const onFormSubmit = (data: FormValues) => {
@@ -24,7 +24,7 @@ export default function LoginPage() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-md/50">
+        <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/50">
             <fieldset>
                 <legend className="font-bold text-3xl text-center m-4">Sign In</legend>
                 <div className="w-full">

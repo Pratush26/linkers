@@ -5,7 +5,6 @@ import "../form.css"
 import { FcGoogle } from "react-icons/fc";
 import { createUser } from "@/app/Actions/dbFuntions";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -19,19 +18,13 @@ interface FormValues {
 export default function RegistrationPage() {
   const router = useRouter()
   const { data: session } = useSession()
-  if (session) router.push("/dashboard")
+  if (session) router.push(`/dashboard/${session?.user?.email}`)
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
   const onFormSubmit = async (data: FormValues) => {
 
     if (!data.photo || data.photo.length === 0) return;
-    const formData = new FormData();
-    formData.append("image", data.photo[0]);
-
     try {
-      console.log(process.env.DB_URL)
-      const ImgRes = await axios.post(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`, formData);
-      data.photo = ImgRes.data.data.url;
       const res = await createUser(data)
       if (res.success) toast.success(res.message as string || "Process successful")
       else toast.error(res.message as string || "Something went wrong")
@@ -41,7 +34,7 @@ export default function RegistrationPage() {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-md/50">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/50">
       <fieldset>
         <legend className="font-bold text-3xl text-center m-4">Create an Account</legend>
         <div className="w-full">
