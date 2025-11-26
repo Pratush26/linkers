@@ -4,7 +4,7 @@ const contentSchema = new Schema({
     title: { type: String, required: true },
     image: [{ type: String, required: true }],
     description: { type: String, required: true },
-    tags: [{ type: String }],
+    tags: { type: String },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     disliked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

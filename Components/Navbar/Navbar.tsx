@@ -10,13 +10,12 @@ import { BsGearFill } from "react-icons/bs";
 
 export default function Navbar() {
     const { data: session } = useSession()
-    console.log(session)
     const pathname = usePathname()
     const [expaneded, setExpaneded] = useState(false)
     return (
         <nav className="flex justify-between items-center py-3 px-9 text-sm font-medium relative overflow-x-clip">
             <Link href="/" className="flex text-2xl items-end font-semibold">
-                <Image src="/6975751.png" alt="logo" height={34} width={34} />
+                <Image src="/6975751.png" alt="logo" height="40" width="40" style={{ height: "auto" }} />
                 inkers
             </Link>
             {
@@ -25,6 +24,7 @@ export default function Navbar() {
                 <div className="space-x-3">
                     <ActiveLink path={pathname} href="/notifications">Notification</ActiveLink>
                     <ActiveLink path={pathname} href="/liked-post">Liked</ActiveLink>
+                    <ActiveLink path={pathname} href="/explore">Explore</ActiveLink>
                 </div>
             }
             {

@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import "../form.css"
 import axios from "axios";
 import { toast } from "react-toastify";
+import { createContent } from "@/app/Actions/dbFuntions";
+import { useSession } from "next-auth/react";
 
 interface FormValues {
   title: string;
@@ -11,8 +13,9 @@ interface FormValues {
   photo: FileList;
 };
 
-export default function CreatePost() {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
+export default function CreateContent() {
+  const { data: session } = useSession()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>()
   const onFormSubmit = async (data: FormValues) => {
     if (!data.photo || data.photo.length === 0) {
       toast.error("Please select at least one image");
@@ -21,8 +24,6 @@ export default function CreatePost() {
 
     try {
       const uploadedUrls: string[] = [];
-
-      // Loop over each selected file
       for (let i = 0; i < data.photo.length; i++) {
         const formData = new FormData();
         formData.append("file", data.photo[i]);
@@ -40,9 +41,20 @@ export default function CreatePost() {
           toast.error(`Image ${i + 1} upload failed`);
         }
       }
-
-      console.log("All uploaded URLs:", uploadedUrls);
-      // Now you can send these URLs to your server / database
+      if(!session?.user?._id) return;
+      const obj = {
+        title: data.title,
+        tags: data.tags,
+        description: data.description,
+        authorId: session?.user?._id,
+        photo: uploadedUrls
+      }
+      const res = await createContent(obj)
+      if(res.success === true) {
+        toast.success(res.message)
+        reset()
+      }
+      else toast.error(res.message || "Something went wrong during upload" )
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong during upload");
@@ -50,9 +62,9 @@ export default function CreatePost() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-md/50">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/20">
       <fieldset>
-        <legend className="font-bold text-3xl text-center m-4">Create an Post</legend>
+        <legend className="font-bold text-3xl text-center m-4">Create an Content</legend>
         <div className="w-full">
           {errors.title ? <p className="text-sm text-rose-500">{errors.title.message}</p> : <label htmlFor="title">title :</label>}
           <input type="text" {...register("title", { required: "Title is required" })} placeholder="Enter your content's title" id="title" />
