@@ -10,6 +10,7 @@ import { BsGearFill } from "react-icons/bs";
 
 export default function Navbar() {
     const { data: session } = useSession()
+    console.log(session)
     const pathname = usePathname()
     const [expaneded, setExpaneded] = useState(false)
     return (

@@ -87,7 +87,6 @@ export default function RegistrationPage() {
         <p className="text-sm my-3">Already have an account? <Link href="/login" className="text-blue-500 font-medium trns hover:text-blue-600">Login</Link></p>
         <div className="flex flex-col items-center gap-2">
           <button type="submit" className="btn trns rounded-md hover:scale-103">{isSubmitting ? "Creating..." : "Create"}</button>
-          <button type="button" className="btn-out trns rounded-md hover:scale-103 flex gap-2 items-center"><FcGoogle /> Sign up with Google</button>
         </div>
       </fieldset>
     </form>
