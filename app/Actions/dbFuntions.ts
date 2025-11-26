@@ -20,10 +20,10 @@ export const createUser = async (data: UserData) => {
         if (exists) return { success: false, message: "User already exists" };
 
         const formData = new FormData();
-        formData.append("file", photo[0]);
-        formData.append("upload_preset", process.env.NEXT_PUBLIC_Cloudinary_Upload_Preset as string);
-        formData.append("folder", "user_images");
-        
+        formData.append("file", photo[0]);  //  photo file
+        formData.append("upload_preset", process.env.NEXT_PUBLIC_Cloudinary_Upload_Preset as string);   //  previously created upload preset
+        formData.append("folder", "user_images");   //  folder name in cloudinary
+
         const ImgRes = await axios.post(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_Cloudinary_CloudName}/image/upload`, formData);
         if (!ImgRes?.data?.url) return { success: false, message: "Image upload failed" };
 

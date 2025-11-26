@@ -4,7 +4,7 @@ import { auth } from './auth'
 
 export async function proxy(request: NextRequest) {
     const session = await auth()
-    if (!session) return NextResponse.redirect(new URL('/home', request.url))
+    if (!session) return NextResponse.redirect(new URL('/', request.url))
 }
 
 export const config = {

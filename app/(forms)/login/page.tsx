@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import "../form.css"
 import { FcGoogle } from "react-icons/fc";
 import { GoogleSignin } from "@/app/Actions/authFunctions";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 interface FormValues {
@@ -16,11 +16,15 @@ export default function LoginPage() {
 
     const router = useRouter()
     const { data: session } = useSession()
-    if (session) router.push(`/dashboard/${session?.user?.email}`)
+    if (session) router.push(`/dashboard/${session?.user?.username}`)
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
-    const onFormSubmit = (data: FormValues) => {
+    const onFormSubmit = async (data: FormValues) => {
         console.log(data)
+        await signIn("credentials", {
+            ...data,
+            redirect: false,
+        })
     }
 
     return (
