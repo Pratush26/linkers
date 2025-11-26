@@ -2,6 +2,7 @@
 import connectDB from "@/libs/dbConnect"
 import User from "@/models/User"
 import axios from "axios";
+import bcrypt from "bcryptjs";
 
 interface UserData {
     username: string;
@@ -27,7 +28,9 @@ export const createUser = async (data: UserData) => {
         const ImgRes = await axios.post(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_Cloudinary_CloudName}/image/upload`, formData);
         if (!ImgRes?.data?.url) return { success: false, message: "Image upload failed" };
 
-        const newUser = new User({ username, email, password, image: ImgRes?.data?.url })
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ username, email, password: hashedPassword, image: ImgRes?.data?.url })
         await newUser.save()
         return { success: true, message: "User created successfully" };
     } catch (error) {

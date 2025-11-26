@@ -16,7 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         await connectDB()
         const user = await User.findOne({ email: credentials?.email });
         if (!user) throw new Error("No user found");
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(credentials?.password as string, user.password);
         if (!isPasswordValid) throw new Error("Invalid password");
         return {
           image: user.image,
