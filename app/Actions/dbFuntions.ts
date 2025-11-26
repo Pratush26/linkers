@@ -10,27 +10,31 @@ interface UserData {
     password: string;
     photo: string;
 }
+export const uniqueUsername = async (username: string): Promise<boolean> => {
+    try {
+        await connectDB();
+        const exists = await User.findOne({ username });
+        return !exists;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
 export const createUser = async (data: UserData) => {
     try {
         await connectDB()
         const { username, email, password, photo } = data;
+        
+        const isUnique = await uniqueUsername(username);
+        if (!isUnique) return { success: false, message: "This username is already taken" };
 
-        const existingName = await User.findOne({ username })
-        if (existingName) return { success: false, message: "this username is already taken" };
         const exists = await User.findOne({ email })
         if (exists) return { success: false, message: "User already exists" };
 
-        const formData = new FormData();
-        formData.append("file", photo[0]);  //  photo file
-        formData.append("upload_preset", process.env.NEXT_PUBLIC_Cloudinary_Upload_Preset as string);   //  previously created upload preset
-        formData.append("folder", "user_images");   //  folder name in cloudinary
-
-        const ImgRes = await axios.post(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_Cloudinary_CloudName}/image/upload`, formData);
-        if (!ImgRes?.data?.url) return { success: false, message: "Image upload failed" };
-
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = new User({ username, email, password: hashedPassword, image: ImgRes?.data?.url })
+        const newUser = new User({ username, email, password: hashedPassword, image: photo })
         await newUser.save()
         return { success: true, message: "User created successfully" };
     } catch (error) {

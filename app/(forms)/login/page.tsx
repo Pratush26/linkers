@@ -20,7 +20,6 @@ export default function LoginPage() {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
     const onFormSubmit = async (data: FormValues) => {
-        console.log(data)
         await signIn("credentials", {
             ...data,
             redirect: false,

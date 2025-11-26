@@ -3,16 +3,17 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import "../form.css"
 import { FcGoogle } from "react-icons/fc";
-import { createUser } from "@/app/Actions/dbFuntions";
+import { createUser, uniqueUsername } from "@/app/Actions/dbFuntions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 interface FormValues {
   username: string;
   email: string;
   password: string;
-  photo: string;
+  photo: FileList;
 };
 
 export default function RegistrationPage() {
@@ -22,17 +23,35 @@ export default function RegistrationPage() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
   const onFormSubmit = async (data: FormValues) => {
-
-    if (!data.photo || data.photo.length === 0) return;
     try {
-      const res = await createUser(data)
-      if (res.success) toast.success(res.message as string || "Process successful")
-      else toast.error(res.message as string || "Something went wrong")
+      const isUnique = await uniqueUsername(data?.username);
+      if (!isUnique) {
+        toast.warning("This username is already taken");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", data.photo[0]);  //  photo file
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_Cloudinary_Upload_Preset as string);   //  previously created upload preset
+      formData.append("folder", "user_images");   //  folder name in cloudinary
+
+      const ImgRes = await axios.post(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_Cloudinary_CloudName}/image/upload`, formData);
+      if (!ImgRes?.data?.secure_url) {
+        toast.error("Image upload failed");
+        return;
+      }
+
+      const res = await createUser({ ...data, photo: ImgRes?.data?.secure_url });
+      if (res.success) {
+        toast.success(res.message as string || "Process successful");
+      } else {
+        toast.error(res.message as string || "Something went wrong");
+      }
     } catch (err) {
       toast.error("Something went wrong");
       console.error(err);
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/50">
       <fieldset>
