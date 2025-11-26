@@ -1,7 +1,8 @@
 import Image from "next/image"
 import { getContent } from "../Actions/dbFuntions"
-import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai"
 import { BiCommentDetail } from "react-icons/bi"
+import LikeBtn from "@/Components/Button/Like"
+import DislikeBtn from "@/Components/Button/DisLike"
 
 export default async function ExplorePage() {
     const data = await getContent()
@@ -25,10 +26,10 @@ export default async function ExplorePage() {
                                         <p className="text-sm text-gray-600">{new Date(e.createdAt).toLocaleString()}</p>
                                     </div>
                                 </span>
-                                <span className="flex gap-2 text-xl">
-                                    <button className="hover:bg-gray-100 rounded-full hover:scale-110 cursor-pointer trns p-1.5"><AiOutlineLike /></button>
-                                    <button className="hover:bg-gray-100 rounded-full hover:scale-110 cursor-pointer trns p-1.5"><AiOutlineDislike /></button>
-                                    <button className="hover:bg-gray-100 rounded-full hover:scale-110 cursor-pointer trns p-1.5"><BiCommentDetail /></button>
+                                <span className="flex gap-1 text-base font-medium">
+                                    <LikeBtn _id={e._id} array={e.liked} />
+                                    <DislikeBtn _id={e._id} array={e.disliked} />
+                                    <button className="hover:bg-gray-100 rounded-full hover:scale-110 cursor-pointer trns flex items-start gap-0.5 p-1.5">{e.comments.length}<BiCommentDetail className="text-xl" /></button>
                                 </span>
                             </div>
                             <article>

@@ -1,4 +1,5 @@
 "use server"
+import { auth } from "@/auth";
 import connectDB from "@/libs/dbConnect"
 import Content from "@/models/Content";
 import User from "@/models/User"
@@ -77,5 +78,39 @@ export const getContent = async () => {
     } catch (error) {
         console.error("createContent error:", error);
         return [];
+    }
+}
+export const hitReaction = async (_id: string, type: string) => {
+    try {
+        await connectDB()
+        const session = await auth()
+        const userId = session?.user._id
+        if (!userId) return { success: false, message: "Login is required" };
+
+        const post = await Content.findById(_id);
+        if (!post) return { success: false, message: "Post not found" };
+
+        const likedArray = post.liked.map((id: string) => id.toString());
+        const dislikedArray = post.disliked.map((id: string) => id.toString());
+        let updateAction;
+
+        if (type === "like") {
+            if (dislikedArray.includes(userId)) await Content.updateOne({ _id }, { $pull: { disliked: userId } });
+
+            if (likedArray.includes(userId)) updateAction = { $pull: { liked: userId } };
+            else updateAction = { $addToSet: { liked: userId } };
+        }
+        else {
+            if (likedArray.includes(userId)) await Content.updateOne({ _id }, { $pull: { liked: userId } });
+
+            if (dislikedArray.includes(userId)) updateAction = { $pull: { disliked: userId } };
+            else updateAction = { $addToSet: { disliked: userId } };
+        }
+
+        const res = await Content.updateOne({ _id }, updateAction);
+        return res;
+    } catch (error) {
+        console.error("createContent error:", error);
+        return { success: false, message: "something went wrong!" };;
     }
 }
