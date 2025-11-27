@@ -10,7 +10,7 @@ export default function Sidebar({extended = false} : {extended?: boolean}) {
             <Link className="w-full trns hover:bg-white p-2 rounded-sm" href="/">Home</Link>
             <Link className="w-full trns hover:bg-white p-2 rounded-sm" href={`/dashboard/${session?.user?.username}`}>Dashboard</Link>
             <Link className="w-full trns hover:bg-white p-2 rounded-sm" href="/create-content">Create Content</Link>
-            <Link className="w-full trns hover:bg-white p-2 rounded-sm" href="/create-content">Update Profile</Link>
+            <Link className="w-full trns hover:bg-white p-2 rounded-sm" href="/change-password">Change Password</Link>
             <button onClick={() => signOut()} className="w-fit btn trns hover:scale-102 rounded-sm">Log out</button>
         </aside>
     )

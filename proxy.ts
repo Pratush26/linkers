@@ -8,5 +8,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/create-content', '/explore', '/liked-post', '/notification', '/update-profile']
+    matcher: ['/dashboard/:path*', '/create-content', '/explore', '/liked-post', '/notification', '/change-password']
 }

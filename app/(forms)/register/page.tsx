@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import "../form.css"
-import { FcGoogle } from "react-icons/fc";
 import { createUser, uniqueUsername } from "@/app/Actions/dbFuntions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -13,6 +12,7 @@ interface FormValues {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
   photo: FileList;
 };
 
@@ -20,7 +20,7 @@ export default function RegistrationPage() {
   const router = useRouter()
   const { data: session } = useSession()
   if (session) router.push(`/dashboard/${session?.user?.email}`)
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>()
+  const { register, handleSubmit, getValues, reset, formState: { errors, isSubmitting } } = useForm<FormValues>()
 
   const onFormSubmit = async (data: FormValues) => {
     try {
@@ -42,7 +42,8 @@ export default function RegistrationPage() {
 
       const res = await createUser({ ...data, photo: ImgRes?.data?.secure_url });
       if (res.success) {
-        toast.success(res.message as string || "Process successful");
+        toast.success(res.message as string || "Successfully registered");
+        reset()
       } else {
         toast.error(res.message as string || "Something went wrong");
       }
@@ -84,8 +85,12 @@ export default function RegistrationPage() {
           {errors.password ? <p className="text-sm text-rose-500">{errors.password.message}</p> : <label htmlFor="password">password :</label>}
           <input type="password" {...register("password", { required: "password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/, message: "Password must contain at least 8 upper and lowercase characters" } })} placeholder="Enter password" id="password" />
         </div>
+        <div className="w-full">
+          {errors.confirmPassword ? <p className="text-sm text-rose-500">{errors.confirmPassword.message}</p> : <label htmlFor="confirmPassword">Confirm Password :</label>}
+          <input type="password" {...register("confirmPassword", { required: "Confirm password is required", validate: (value) => value === getValues("password") || "Confirm passwords do not match" })} placeholder="Enter confirm password" id="confirmPassword" />
+        </div>
         <p className="text-sm my-3">Already have an account? <Link href="/login" className="text-blue-500 font-medium trns hover:text-blue-600">Login</Link></p>
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex justify-center w-full">
           <button type="submit" className="btn trns rounded-md hover:scale-103">{isSubmitting ? "Creating..." : "Create"}</button>
         </div>
       </fieldset>

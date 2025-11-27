@@ -19,6 +19,7 @@ interface ContentData {
     photo: string[];
 }
 
+//  user profile related functions
 export const uniqueUsername = async (username: string): Promise<boolean> => {
     try {
         await connectDB();
@@ -43,25 +44,53 @@ export const createUser = async (data: UserData) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ username, email, password: hashedPassword, image: photo })
-        await newUser.save()
+        const res = await newUser.save()
+
+        if (!res) return { success: false, message: "Failed to create user" };
         return { success: true, message: "User created successfully" };
     } catch (error) {
         console.error("createUser error:", error);
-        return { success: false, message: "Failed to create user" };
+        return { success: false, message: "Something went wrong!" };
     }
 
 }
 
+export const updatePassword = async (data: {oldPassword: string; password: string; confirmPassword: string}) => {
+    try {
+        await connectDB()
+        const {oldPassword, confirmPassword} = data
+        const session = await auth()
+        if (!session?.user?._id) return { success: false, message: "Unauthorized" };
+
+        const user = await User.findById(session?.user?._id);
+        const isMatched = bcrypt.compare(user.password, oldPassword)
+        if (!isMatched) return { success: false, message: "Password doesn't match" };
+
+        const hashedPassword = await bcrypt.hash(confirmPassword, 10);
+        const res = await User.updateOne({ _id: session?.user?._id }, { $set: { password: hashedPassword } });
+
+        if (res.modifiedCount) return { success: true, message: "Password updated successfully" };
+        return { success: false, message: "Failed to update password" };
+    } catch (error) {
+        console.error("password update error:", error);
+        return { success: false, message: "Failed to update password" };
+    }
+
+}
+
+//  Content related functions
 export const createContent = async (data: ContentData) => {
     try {
         await connectDB()
         const { title, description, tags, photo, authorId } = data;
         const newContent = new Content({ title, description, tags, image: photo, createdBy: authorId })
-        await newContent.save()
-        return { success: true, message: "User created successfully" };
+        const res = await newContent.save()
+
+        if (!res) return { success: false, message: "Failed to publish content" };
+        return { success: true, message: "Content published successfully" };
     } catch (error) {
         console.error("createContent error:", error);
-        return { success: false, message: "Failed to create content" };
+        return { success: false, message: "Something went wrong!" };
     }
 }
 
@@ -131,26 +160,27 @@ export const likedContent = async () => {
             .sort({ createdAt: -1 })
             .populate("createdBy")
             .lean();
+
         const result = res.map(doc => ({
             ...doc,
             _id: doc._id.toString(),
             liked: doc.liked?.map((u: string) => u.toString()) || [],
             disliked: doc.disliked?.map((u: string) => u.toString()) || [],
         }));
-        console.log(result)
         return result;
     } catch (error) {
         console.error("createContent error:", error);
         return [];
     }
 }
+
 export const ContentBy_username = async (username: string) => {
     try {
         await connectDB()
         const session = await auth()
-        if (!session) return {userData: {}, content: []};
-        const user = await User.findOne({username})
-        if (!user) return {userData: {}, content: []};
+        if (!session) return { userData: {}, content: [] };
+        const user = await User.findOne({ username })
+        if (!user) return { userData: {}, content: [] };
 
         const res = await Content.find({ createdBy: user._id })
             .sort({ createdAt: -1 })
@@ -162,9 +192,9 @@ export const ContentBy_username = async (username: string) => {
             liked: doc.liked?.map((u: string) => u.toString()) || [],
             disliked: doc.disliked?.map((u: string) => u.toString()) || [],
         }));
-        return {userData: user, content: result};
+        return { userData: user, content: result };
     } catch (error) {
         console.error("createContent error:", error);
-        return {userData: {}, content: []}
+        return { userData: {}, content: [] }
     }
 }
