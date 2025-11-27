@@ -3,7 +3,6 @@ import ContentCard from "@/Components/ContentCard"
 
 export default async function ExplorePage() {
     const data = await getContent()
-    console.log(data)
     return (
         <main className="w-5/6 mx-auto space-y-6 my-10">
             <h1 className="text-3xl font-semibold text-center">Content Stream</h1>
@@ -13,3 +12,5 @@ export default async function ExplorePage() {
         </main>
     )
 }
+export const dynamic = "force-dynamic";
+export const revalidate = 0;

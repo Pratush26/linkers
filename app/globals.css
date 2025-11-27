@@ -38,7 +38,7 @@ body {
 }
 .btn-out{
   border: 1px solid var(--foreground);
-  padding: 8px 16p;
+  padding: 8px 16px;
   font-weight: 500;
   cursor: pointer;
 }

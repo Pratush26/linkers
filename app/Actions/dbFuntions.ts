@@ -18,6 +18,7 @@ interface ContentData {
     tags: string;
     photo: string[];
 }
+
 export const uniqueUsername = async (username: string): Promise<boolean> => {
     try {
         await connectDB();
@@ -68,7 +69,7 @@ export const getContent = async () => {
     try {
         await connectDB()
         // const {limit = 0, skip = 0, _id = "", tags = ""} = data
-        const res = await Content.find()
+        const res = await Content.find({})
             .sort({ createdAt: -1 })
             .populate("createdBy")
             .lean()
