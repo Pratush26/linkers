@@ -1,3 +1,24 @@
+# Linkers
+This is online knowledge, ideas and content sharing platform.
+
+### used Tech
+- Next js
+- Tailwind CSS
+- Axios
+- MongoDB
+- Next Auth
+- React Toastify
+
+### Features
+- User can create account and login with provider
+- Share contents, ideas
+- React, comment and reply on content
+- Mange their account
+
+### Links
+- [Repository Link](https://github.com/Pratush26/linkers)
+- [Live Link](https://linkers-tau.vercel.app/)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

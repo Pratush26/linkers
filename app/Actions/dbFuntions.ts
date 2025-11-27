@@ -63,7 +63,7 @@ export const updatePassword = async (data: {oldPassword: string; password: strin
         if (!session?.user?._id) return { success: false, message: "Unauthorized" };
 
         const user = await User.findById(session?.user?._id);
-        const isMatched = bcrypt.compare(user.password, oldPassword)
+        const isMatched = await bcrypt.compare(oldPassword, user.password)
         if (!isMatched) return { success: false, message: "Password doesn't match" };
 
         const hashedPassword = await bcrypt.hash(confirmPassword, 10);
