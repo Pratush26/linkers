@@ -2,6 +2,7 @@ import Image from "next/image";
 import LikeBtn from "./Button/Like";
 import DislikeBtn from "./Button/DisLike";
 import { BiCommentDetail } from "react-icons/bi";
+import Link from "next/link";
 
 interface contentType {
     _id: string,
@@ -28,7 +29,7 @@ export default function ContentCard({ e }: { e: contentType }) {
                     <span className="flex gap-2 w-full">
                         <Image src={e.createdBy.image} height="50" width="50" style={{ height: "auto" }} className="rounded-full object-cover aspect-square" alt="user Image" />
                         <div>
-                            <p className="font-medium">@{e.createdBy.username}</p>
+                            <Link href={`/dashboard/${e.createdBy.username}`} className="font-medium hover:underline underline-offset-4">@{e.createdBy.username}</Link>
                             <p className="text-sm text-gray-600">{new Date(e.createdAt).toLocaleString()}</p>
                         </div>
                     </span>

@@ -1,21 +1,28 @@
-import { myContent } from "@/app/Actions/dbFuntions";
+import { ContentBy_username } from "@/app/Actions/dbFuntions";
 import { auth } from "@/auth";
 import ContentCard from "@/Components/ContentCard";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function DashboardPage(props: PageProps<'/dashboard/[username]'>) {
     const { username } = await props.params
     const session = await auth()
-    const data = await myContent()
-    console.log(data)
+    const { userData, content: data } = await ContentBy_username(username)
     return (
         <main>
             <section className="flex items-center justify-center gap-4 mt-10">
-                <Image src={session?.user?.image || ""} width={80} height={80} alt={`profile picture`} className="object-cover aspect-square object-center rounded-full" />
+                <Image src={userData?.image || ""} width={80} height={80} alt={`profile picture`} className="object-cover aspect-square object-center rounded-full" />
                 <div className="font-medium">
-                    <h4 className="text-xl">@{session?.user?.username}</h4>
-                    <p className="text-sm font-normal">{session?.user?.email}</p>
-                    <p>Total Content: {username == session?.user?.username && data.length}</p>
+                    <h4 className="text-xl">@{userData?.username}</h4>
+                    <p className="text-sm font-normal">{userData?.email}</p>
+                    {
+                        username == session?.user?.username
+                        &&
+                        <div className="space-y-2">
+                            <p>Total Content: {data.length}</p>
+                            <Link href={"/"} className="btn hover:shadow-md/80 trns rounded-lg">Update Profile</Link>
+                        </div>
+                    }
                 </div>
             </section>
             <section className="w-5/6 mx-auto space-y-6 my-10">

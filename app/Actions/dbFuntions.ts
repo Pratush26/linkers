@@ -144,14 +144,15 @@ export const likedContent = async () => {
         return [];
     }
 }
-export const myContent = async () => {
+export const ContentBy_username = async (username: string) => {
     try {
         await connectDB()
         const session = await auth()
-        const userId = session?.user._id
-        if (!userId) return [];
+        if (!session) return {userData: {}, content: []};
+        const user = await User.findOne({username})
+        if (!user) return {userData: {}, content: []};
 
-        const res = await Content.find({ createdBy: userId })
+        const res = await Content.find({ createdBy: user._id })
             .sort({ createdAt: -1 })
             .populate("createdBy")
             .lean();
@@ -161,9 +162,9 @@ export const myContent = async () => {
             liked: doc.liked?.map((u: string) => u.toString()) || [],
             disliked: doc.disliked?.map((u: string) => u.toString()) || [],
         }));
-        return result;
+        return {userData: user, content: result};
     } catch (error) {
         console.error("createContent error:", error);
-        return [];
+        return {userData: {}, content: []}
     }
 }
