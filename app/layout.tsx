@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/Components/Navbar/Navbar"
 import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
+import Footer from "@/Components/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
         <SessionProvider>
           <Navbar />
           {children}
+          <Footer />
         </SessionProvider>
         <ToastContainer />
       </body>

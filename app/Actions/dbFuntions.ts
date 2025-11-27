@@ -55,10 +55,10 @@ export const createUser = async (data: UserData) => {
 
 }
 
-export const updatePassword = async (data: {oldPassword: string; password: string; confirmPassword: string}) => {
+export const updatePassword = async (data: { oldPassword: string; password: string; confirmPassword: string }) => {
     try {
         await connectDB()
-        const {oldPassword, confirmPassword} = data
+        const { oldPassword, confirmPassword } = data
         const session = await auth()
         if (!session?.user?._id) return { success: false, message: "Unauthorized" };
 
@@ -102,6 +102,47 @@ export const getContent = async () => {
             .sort({ createdAt: -1 })
             .populate("createdBy")
             .lean()
+        const result = res.map(doc => ({
+            ...doc,
+            _id: doc._id.toString(),
+            liked: doc.liked?.map((u: string) => u.toString()) || [],
+            disliked: doc.disliked?.map((u: string) => u.toString()) || [],
+        }));
+        return result;
+    } catch (error) {
+        console.error("createContent error:", error);
+        return [];
+    }
+}
+
+export const trendingContents = async () => {
+    try {
+        await connectDB()
+        const res = await Content.aggregate([
+            {
+                $addFields: {
+                    likesCount: { $size: "$liked" }
+                }
+            },
+            { $sort: { likesCount: -1 } },
+            { $limit: 3 },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "createdBy",
+                    foreignField: "_id",
+                    as: "createdBy"
+                }
+            },
+            { $unwind: "$createdBy" },
+            {
+                $project: {
+                    "createdBy.password": 0,
+                    "createdBy.__v": 0,
+                    "__v": 0
+                }
+            }
+        ]);
         const result = res.map(doc => ({
             ...doc,
             _id: doc._id.toString(),
