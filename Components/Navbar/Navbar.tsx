@@ -30,7 +30,7 @@ export default function Navbar() {
             {
                 session ?
                     <div className="flex gap-2 items-center">
-                        <ActiveLink path={pathname} href={`/dashboard/${session?.user?.email}`}>Dashboard</ActiveLink>
+                        <ActiveLink path={pathname} href={`/dashboard/${session?.user?.username}`}>Dashboard</ActiveLink>
                         <span className={`${expaneded && "bg-gray-200 inset-shadow-sm"} p-2 trns rounded-sm flex items-center justify-center`}>
                             <button onClick={() => setExpaneded(!expaneded)} className={`${expaneded && "rotate-90"} trns`}><BsGearFill /></button>
                         </span>

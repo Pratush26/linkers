@@ -29,7 +29,6 @@ export const uniqueUsername = async (username: string): Promise<boolean> => {
     }
 }
 
-
 export const createUser = async (data: UserData) => {
     try {
         await connectDB()
@@ -69,10 +68,15 @@ export const getContent = async () => {
     try {
         await connectDB()
         // const {limit = 0, skip = 0, _id = "", tags = ""} = data
-        const res = await Content.find().sort({ createdAt: -1 }).populate("createdBy").lean()
+        const res = await Content.find()
+            .sort({ createdAt: -1 })
+            .populate("createdBy")
+            .lean()
         const result = res.map(doc => ({
             ...doc,
-            _id: doc._id.toString()
+            _id: doc._id.toString(),
+            liked: doc.liked?.map((u: string) => u.toString()) || [],
+            disliked: doc.disliked?.map((u: string) => u.toString()) || [],
         }));
         return result;
     } catch (error) {
@@ -112,5 +116,53 @@ export const hitReaction = async (_id: string, type: string) => {
     } catch (error) {
         console.error("createContent error:", error);
         return { success: false, message: "something went wrong!" };;
+    }
+}
+
+export const likedContent = async () => {
+    try {
+        await connectDB()
+        const session = await auth()
+        const userId = session?.user._id
+        if (!userId) return [];
+
+        const res = await Content.find({ liked: userId })
+            .sort({ createdAt: -1 })
+            .populate("createdBy")
+            .lean();
+        const result = res.map(doc => ({
+            ...doc,
+            _id: doc._id.toString(),
+            liked: doc.liked?.map((u: string) => u.toString()) || [],
+            disliked: doc.disliked?.map((u: string) => u.toString()) || [],
+        }));
+        console.log(result)
+        return result;
+    } catch (error) {
+        console.error("createContent error:", error);
+        return [];
+    }
+}
+export const myContent = async () => {
+    try {
+        await connectDB()
+        const session = await auth()
+        const userId = session?.user._id
+        if (!userId) return [];
+
+        const res = await Content.find({ createdBy: userId })
+            .sort({ createdAt: -1 })
+            .populate("createdBy")
+            .lean();
+        const result = res.map(doc => ({
+            ...doc,
+            _id: doc._id.toString(),
+            liked: doc.liked?.map((u: string) => u.toString()) || [],
+            disliked: doc.disliked?.map((u: string) => u.toString()) || [],
+        }));
+        return result;
+    } catch (error) {
+        console.error("createContent error:", error);
+        return [];
     }
 }
