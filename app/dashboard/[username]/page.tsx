@@ -1,9 +1,9 @@
 import { ContentBy_username } from "@/app/Actions/dbFuntions";
 import { auth } from "@/auth";
 import ContentCard from "@/Components/ContentCard";
+import Update_profileImg from "@/Components/update-profile/update_profileImg";
+import Update_usernameForm from "@/Components/update-profile/update_username";
 import Image from "next/image";
-import { CiEdit } from "react-icons/ci";
-import { MdEdit } from "react-icons/md";
 
 export default async function DashboardPage(props: PageProps<'/dashboard/[username]'>) {
     const { username } = await props.params
@@ -14,11 +14,11 @@ export default async function DashboardPage(props: PageProps<'/dashboard/[userna
         <main>
             <section className="flex items-center justify-center gap-4 mt-10">
                 <div className="flex items-baseline">
-                    {isPersonal && <MdEdit title="Edit profile photo" className="-mr-2 text-2xl trns hover:text-3xl" />}
-                    <Image src={userData?.image || ""} width={80} height={80} alt={`profile picture`} className="object-cover aspect-square object-center rounded-full" />
+                    {isPersonal && <Update_profileImg />}
+                    <Image src={userData?.image} width={80} height={80} alt={`profile picture`} className="object-cover aspect-square object-center rounded-full" />
                 </div>
                 <div className="font-medium">
-                    <h4 className="text-xl flex gap-2 items-center">@{userData?.username}{isPersonal && <CiEdit title="Edit username" className="hover:text-2xl trns cursor-pointer" />}</h4>
+                    <h4 className="text-xl flex gap-2 items-center">@{userData?.username}{isPersonal && <Update_usernameForm />}</h4>
                     <p className="text-sm font-normal">{userData?.email}</p>
                     {isPersonal && <p>Total Content: {data.length}</p>}
                 </div>

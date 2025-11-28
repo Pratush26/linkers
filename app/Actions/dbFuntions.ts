@@ -77,6 +77,39 @@ export const updatePassword = async (data: { oldPassword: string; password: stri
     }
 
 }
+export const update_usernameFunc = async (new_username: string) => {
+    try {
+        await connectDB()
+        const session = await auth()
+        if (!session?.user?._id) return { success: false, message: "Unauthorized" };
+
+        const isUnique = await uniqueUsername(new_username);
+        if (!isUnique) return { success: false, message: "This username is already taken" };
+
+        const res = await User.updateOne({ _id: session?.user?._id }, { $set: { username: new_username } });
+        if (res.modifiedCount) return { success: true, message: "username is updated successfully" };
+        return { success: false, message: "Failed to update usename" };
+    } catch (error) {
+        console.error("username update error:", error);
+        return { success: false, message: "Something went wrong!" };
+    }
+
+}
+export const update_profileImgFunc = async (photo: string) => {
+    try {
+        await connectDB()
+        const session = await auth()
+        if (!session?.user?._id) return { success: false, message: "Unauthorized" };
+
+        const res = await User.updateOne({ _id: session?.user?._id }, { $set: { image: photo } });
+        if (res.modifiedCount) return { success: true, message: "Profile image is updated successfully" };
+        return { success: false, message: "Failed to update profile image" };
+    } catch (error) {
+        console.error("profile image update error:", error);
+        return { success: false, message: "Something went wrong!" };
+    }
+
+}
 
 //  Content related functions
 export const createContent = async (data: ContentData) => {
