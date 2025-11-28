@@ -27,7 +27,7 @@ export default function LoginPage() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/50">
+        <form onSubmit={handleSubmit(onFormSubmit)} className="w-full md:w-2/3 lg:w-1/2 mx-auto p-6 sm:p-8 my-8 rounded-2xl shadow-lg/50">
             <fieldset>
                 <legend className="font-bold text-3xl text-center m-4">Sign In</legend>
                 <div className="w-full">

@@ -23,22 +23,54 @@ body {
   background: var(--background);
   font-family: var(--font-work-sans);
   color: var(--foreground);
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
 }
 
-.trns{
+.trns {
   transition: all .3s ease-in-out;
 }
 
-.btn{
+.btn {
   background-color: var(--foreground);
   color: var(--background);
   padding: 8px 16px;
   font-weight: 600;
   cursor: pointer;
 }
-.btn-out{
+
+.btn-out {
   border: 1px solid var(--foreground);
   padding: 8px 16px;
   font-weight: 500;
   cursor: pointer;
+}
+
+.zoomOut {
+  animation-name: rotateAnimation;
+  animation-timeline: view();
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  scroll-behavior: smooth;
+}
+
+@keyframes rotateAnimation {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+
+  80% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
 }

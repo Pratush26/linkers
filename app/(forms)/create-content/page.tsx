@@ -62,7 +62,7 @@ export default function CreateContent() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/20">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="w-full md:w-2/3 lg:w-1/2 mx-auto my-8 p-6 sm:p-8 rounded-2xl shadow-lg/20">
       <fieldset>
         <legend className="font-bold text-3xl text-center m-4">Create an Content</legend>
         <div className="w-full">

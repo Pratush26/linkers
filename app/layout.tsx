@@ -41,9 +41,9 @@ export default function RootLayout({
         <SessionProvider>
           <Navbar />
           {children}
+          <ToastContainer />
           <Footer />
         </SessionProvider>
-        <ToastContainer />
       </body>
     </html>
   );

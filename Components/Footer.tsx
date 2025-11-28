@@ -5,19 +5,19 @@ import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
     return (
-        <section className="text-center space-y-5 p-2">
-            <footer className="bg-gray-900 text-white w-11/12 mx-auto rounded-3xl px-4 py-10 grid grid-cols-4 gap-4 items-center-safe justify-items-center-safe">
+        <section className="text-center space-y-5 p-2 w-full">
+            <footer className="bg-gray-900 text-white w-11/12 mx-auto rounded-3xl px-4 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center-safe justify-items-center-safe">
             <Link href="/" className="flex text-2xl items-end font-semibold">
                 <Image src="/6975751.png" alt="logo" height="40" width="40" style={{ height: "auto" }} />
                 inkers
             </Link>
-            <div className="flex flex-col text-start gap-2 text-sm">
+            <div className="flex flex-col text-center md:text-start gap-2 text-sm">
             <Link className="hover:text-gray-400 trns" href="/">Home</Link>
             <Link className="hover:text-gray-400 trns" href="/explore">Explore</Link>
             <Link className="hover:text-gray-400 trns" href="/login">Help Center</Link>
             <Link className="hover:text-gray-400 trns" href="/register">Terms & Conditions</Link>
             </div>
-            <div className="flex flex-col text-start gap-2 text-sm">
+            <div className="flex flex-col text-center md:text-start gap-2 text-sm">
             <Link className="hover:text-gray-400 trns" href="/">About Us</Link>
             <Link className="hover:text-gray-400 trns" href="/login">Login</Link>
             <Link className="hover:text-gray-400 trns" href="/register">Register</Link>

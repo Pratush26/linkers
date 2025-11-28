@@ -13,7 +13,7 @@ export default function Navbar() {
     const pathname = usePathname()
     const [expaneded, setExpaneded] = useState(false)
     return (
-        <nav className="flex justify-between items-center py-3 px-9 text-sm font-medium relative overflow-x-clip">
+        <nav className="flex justify-between items-center w-full py-3 px-9 text-sm font-medium relative overflow-x-clip">
             <Link href="/" className="flex text-2xl items-end font-semibold">
                 <Image src="/6975751.png" alt="logo" height="40" width="40" style={{ height: "auto" }} />
                 inkers
@@ -21,7 +21,7 @@ export default function Navbar() {
             {
                 session
                 &&
-                <div className="space-x-3">
+                <div className="space-x-3 hidden sm:block">
                     <ActiveLink path={pathname} href="/notifications">Notification</ActiveLink>
                     <ActiveLink path={pathname} href="/liked-post">Liked</ActiveLink>
                     <ActiveLink path={pathname} href="/explore">Explore</ActiveLink>

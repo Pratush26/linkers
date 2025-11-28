@@ -21,7 +21,7 @@ export default function ChangePasswordPage() {
         else toast.error(res.message as string || "Something went wrong!")
     }
     return (
-        <form onSubmit={handleSubmit(onFormSubmit)} className="w-1/2 mx-auto p-8 rounded-2xl shadow-lg/50">
+        <form onSubmit={handleSubmit(onFormSubmit)} className="w-full md:w-2/3 lg:w-1/2 mx-auto my-8 p-6 sm:p-8 rounded-2xl shadow-lg/50">
             <legend className="font-bold text-3xl text-center m-4">Change Password</legend>
             <div className="w-full">
                 {errors.oldPassword ? <p className="text-sm text-rose-500">{errors.oldPassword.message}</p> : <label htmlFor="oldPassword">Old Password :</label>}
